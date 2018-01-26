@@ -1,0 +1,8 @@
+version: '2'
+services:
+  builder:
+    image: node:6.10.1
+    volumes:
+      - .:/builder/
+    working_dir: /builder/
+

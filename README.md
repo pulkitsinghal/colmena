@@ -85,6 +85,8 @@ npm install -g @angular/cli lerna loopback-cli
 
 ### Setup
 
+#### Local
+
 Clone the repository and install the dependencies:
 
 ```bash
@@ -92,6 +94,54 @@ git clone https://github.com/colmena/colmena
 cd colmena
 npm install
 lerna bootstrap
+```
+
+#### Remote
+
+```
+git clone https://github.com/colmena/colmena
+cd colmena
+
+curl https://raw.githubusercontent.com/ShoppinPal/loopback-mongo-sandbox/develop/docker-compose.yml -o docker-compose.yml
+vi docker-compose.yml
+
+# run this as-is
+# dropbox exclude add $SYNC_DEV_HOME/$PROJECT_SYNC_DIR_NAME/.git
+dropbox exclude add $SYNC_DEV_HOME/$PROJECT_SYNC_DIR_NAME/modules/api/content/node_modules && \
+  dropbox exclude add $SYNC_DEV_HOME/$PROJECT_SYNC_DIR_NAME/modules/api/system/node_modules && \
+  dropbox exclude add $SYNC_DEV_HOME/$PROJECT_SYNC_DIR_NAME/modules/api/storage/node_modules && \
+  dropbox exclude add $SYNC_DEV_HOME/$PROJECT_SYNC_DIR_NAME/modules/api/core/node_modules && \
+  dropbox exclude add $SYNC_DEV_HOME/$PROJECT_SYNC_DIR_NAME/modules/admin/auth/node_modules && \
+  dropbox exclude add $SYNC_DEV_HOME/$PROJECT_SYNC_DIR_NAME/modules/admin/data-browser/node_modules && \
+  dropbox exclude add $SYNC_DEV_HOME/$PROJECT_SYNC_DIR_NAME/modules/admin/dashboard/node_modules && \
+  dropbox exclude add $SYNC_DEV_HOME/$PROJECT_SYNC_DIR_NAME/modules/admin/content/node_modules && \
+  dropbox exclude add $SYNC_DEV_HOME/$PROJECT_SYNC_DIR_NAME/modules/admin/system/node_modules && \
+  dropbox exclude add $SYNC_DEV_HOME/$PROJECT_SYNC_DIR_NAME/modules/admin/dev/node_modules && \
+  dropbox exclude add $SYNC_DEV_HOME/$PROJECT_SYNC_DIR_NAME/modules/admin/storage/node_modules && \
+  dropbox exclude add $SYNC_DEV_HOME/$PROJECT_SYNC_DIR_NAME/modules/admin/core/node_modules && \
+  dropbox exclude add $SYNC_DEV_HOME/$PROJECT_SYNC_DIR_NAME/apps/admin/node_modules && \
+  dropbox exclude add $SYNC_DEV_HOME/$PROJECT_SYNC_DIR_NAME/packages/admin-ui/node_modules && \
+  dropbox exclude add $SYNC_DEV_HOME/$PROJECT_SYNC_DIR_NAME/packages/admin-lb-sdk/node_modules && \
+  dropbox exclude add $SYNC_DEV_HOME/$PROJECT_SYNC_DIR_NAME/packages/api-helpers/node_modules && \
+  dropbox exclude add $SYNC_DEV_HOME/$PROJECT_SYNC_DIR_NAME/packages/logger/node_modules && \
+  dropbox exclude add $SYNC_DEV_HOME/$PROJECT_SYNC_DIR_NAME/packages/admin-layout/node_modules && \
+  dropbox exclude add $SYNC_DEV_HOME/$PROJECT_SYNC_DIR_NAME/node_modules && \
+  dropbox exclude add $SYNC_DEV_HOME/$PROJECT_SYNC_DIR_NAME/.ts-cache
+
+# run this as-is
+cd $PROJECT_HOME && ln -s `pwd` ~/Dropbox/remote-dev/$PROJECT_SYNC_DIR_NAME
+
+docker-compose run builder npm install lerna @angular/cli
+docker-compose run builder npm install lerna -v
+docker-compose run builder npm install ng -v   
+docker-compose run builder npm install
+
+vi package.json
+
+docker-compose run builder npm run lerna -- bootstrap
+
+docker-compose -f docker-compose.servers.yml up -d
+docker-compose run builder npm run initdb
 ```
 
 ## Development

@@ -43,6 +43,7 @@
     "servers:start": "docker-compose -f docker-compose.servers.yml up -d",
     "servers:stop": "docker-compose -f docker-compose.servers.yml stop",
     "servers:rm": "npm run servers:stop && docker-compose rm -f",
+    "lerna": "lerna",
     "lint": "prettier --write",
     "sdk": "npm run sdk:api",
     "sdk:api":
